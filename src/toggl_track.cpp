@@ -1,11 +1,11 @@
 #include <Arduino.h>
 
-#include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
+#include <ESP8266WiFi.h>
 #include <WiFiClientSecureBearSSL.h>
 
 #include "certs.h"
-#include "creds.h"
+#include "creds.hpp"
 
 #ifndef STASSID
 #define STASSID "examplessid"
@@ -25,10 +25,10 @@
 #define TOGGLPAYMENTRATE 100.0
 #endif
 
-#include <SPI.h>
-#include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <SPI.h>
+#include <Wire.h>
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
