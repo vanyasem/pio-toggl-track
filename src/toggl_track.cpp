@@ -17,14 +17,6 @@
 #define TOGGLPASSWORD "examplepassword"
 #endif
 
-#ifndef TOGGLWORKSPACEID
-#define TOGGLWORKSPACEID 1337
-#define TOGGLUSERID 111
-#define TOGGLPROJECT1ID 123
-#define TOGGLPROJECT2ID 124
-#define TOGGLPAYMENTRATE 100.0
-#endif
-
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <SPI.h>
@@ -81,14 +73,14 @@ void loop()
 
     HTTPClient https;
     String url = "/reports/api/v3/workspace/";
-    url.concat(TOGGLWORKSPACEID);
+    url.concat(creds_toggl_workspace_id);
     url.concat("/projects/summary");
     if (https.begin(*client, "api.track.toggl.com", 443, url, true))
     {
       https.setAuthorization(TOGGLUSERNAME, TOGGLPASSWORD);
       https.addHeader("Content-Type", "application/json");
 
-      int httpCode = https.POST("{\"end_date\":\"2023-12-05\",\"start_date\":\"2023-11-17\"}");
+      int httpCode = https.POST("{\"end_date\":\"2024-01-31\",\"start_date\":\"2024-01-05\"}");
       Serial.printf("[HTTPS] POST... code: %d\n", httpCode);
 
       // httpCode will be negative on error
@@ -116,32 +108,32 @@ void loop()
           for (JsonObject item : doc.as<JsonArray>())
           {
             long user_id = item["user_id"];
-            if (user_id == TOGGLUSERID)
+            if (user_id == creds_toggl_user_id)
             {
               long tracked_seconds = item["tracked_seconds"];
               total += tracked_seconds;
             }
           }
           display.print(F("T:"));
-          display.println(total / 60.0 / 60.0 * TOGGLPAYMENTRATE, 0);
+          display.println(total / 60.0 / 60.0 * creds_toggl_payment_rate, 0);
           for (JsonObject item : doc.as<JsonArray>())
           {
             long user_id = item["user_id"];
-            if (user_id == TOGGLUSERID)
+            if (user_id == creds_toggl_user_id)
             {
               long project_id = item["project_id"];
               long tracked_seconds = item["tracked_seconds"];
               Serial.printf("[JSON] Tracked Seconds: (%ld) %ld\n", project_id, tracked_seconds);
 
-              if (project_id == TOGGLPROJECT1ID)
+              if (project_id == creds_toggl_project_1_id)
               {
                 display.print(F("V:"));
               }
-              else if (project_id == TOGGLPROJECT2ID)
+              else if (project_id == creds_toggl_project_2_id)
               {
                 display.print(F("M:"));
               }
-              display.println(tracked_seconds / 60.0 / 60.0 * TOGGLPAYMENTRATE, 0);
+              display.println(tracked_seconds / 60.0 / 60.0 * creds_toggl_payment_rate, 0);
             }
           }
           timeClient.update();
@@ -158,7 +150,7 @@ void loop()
       }
       else
       {
-        Serial.printf("[HTTPS] POST... failed, error: %s\n", https.errorToString(httpCode).c_str());
+        Serial.printf("[HTTPS] POST... failed, error: %s\n", HTTPClient::errorToString(httpCode).c_str());
       }
     }
     else
