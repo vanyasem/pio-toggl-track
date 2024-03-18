@@ -80,7 +80,7 @@ void loop()
       https.setAuthorization(TOGGLUSERNAME, TOGGLPASSWORD);
       https.addHeader("Content-Type", "application/json");
 
-      int httpCode = https.POST("{\"end_date\":\"2024-03-25\",\"start_date\":\"2024-03-06\"}");
+      int httpCode = https.POST("{\"end_date\":\"2024-04-15\",\"start_date\":\"2024-03-18\"}");
       Serial.printf("[HTTPS] POST... code: %d\n", httpCode);
 
       // httpCode will be negative on error
